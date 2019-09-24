@@ -16,4 +16,4 @@ AllowTcpForwarding no
 PrintMotd no
 PrintLastLog yes
 PidFile /run/sshd.auth.snoot.club.pid
-ForceCommand /snoots/auth/bin/succeed
+ForceCommand /snoots/auth/auth.snoot.club/bin/succeed
