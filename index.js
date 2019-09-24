@@ -2,7 +2,6 @@ let {send} = require("micro")
 let execa = require("execa")
 let net = require("net")
 let fs = require("fs").promises
-let {router, get} = require("microrouter")
 let crypto = require("crypto")
 
 async function getSnoot(name) {
@@ -84,7 +83,7 @@ async function notfound(request, response) {
 	return send(
 		response,
 		404,
-		"go to https://auth.snoot.club/start/your_snoot_name"
+		"go to https://auth.snoot.club/your_snoot_name"
 	)
 }
 
