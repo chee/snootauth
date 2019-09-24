@@ -1,0 +1,79 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>auth's a snoot</title>
+<style>
+	* {
+		scrollbar-color: #cc3669 #ffe9ed;
+	}
+
+	::selection {
+		background: black;
+		color: white;
+	}
+
+	body {
+		background: #ffe9ed;
+		color: #c36;
+		font-size: 1.6em;
+		line-height: 1.2;
+		width: 80vw;
+		margin: auto;
+	}
+
+	hr {
+		height: 30px;
+		border-style: solid;
+		border-color: #c36;
+		border-width: 0;
+		border-top-width: 2px;
+		border-radius: 10px;
+		position: relative;
+	}
+
+	hr:before {
+		display: block;
+		content: "";
+		height: 100%;
+		transform: translateY(-100%);
+		border-style: solid;
+		border-color: #c36;
+		border-width: 0;
+		border-bottom-width: 2px;
+		border-radius: inherit;
+	}
+
+	code {
+		color: #4abe;
+	}
+</style>
+<h1>
+	Welcome to auth's homepage
+</h1>
+
+<h2>getting started:</h2>
+
+<p>
+	if you are <strong>auth</strong>, you can now ssh or ftp into your account!
+</p>
+
+<p>
+	if you want to host a webpage, put files in the directory
+	<code>application/website</code>
+</p>
+
+<p>
+	the page you are reading right now is the file located at
+	<code>./application/website/index.html</code>
+</p>
+
+<h2>advanced users:</h2>
+
+<p>
+	the start script in your <code>package.json</code> will be run automatically.
+	you can replace it with anything, and as long as it creates and listens on a
+	unix domain socket at <code>./application/sock</code>, it'll be served. the
+	initial setup already does this, and serves files in
+	<code>./application/website</code> and apps in
+	<code>./application/boops</code> using <a
+	href="https://github.com/snootclub/boop">boops</a>.
+</p>

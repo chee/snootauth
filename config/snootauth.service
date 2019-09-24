@@ -1,0 +1,14 @@
+[Unit]
+Description=Snoot Auth OpenSSH Daemon
+Wants=sshdgenkeys.service
+After=sshdgenkeys.service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/sshd -Df /snoots/auth/auth.snoot.club/config/sshd
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
