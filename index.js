@@ -58,7 +58,7 @@ async function listen(request, response, name) {
 				await fs.writeFile(`/snoots/auth/sessions/${name}`, token)
 				response.setHeader(
 					"Set-Cookie",
-					`session=${token}; Domain=snoot.club; Secure;`
+					`session=${token}; Domain=snoot.club; Secure; Path=/`
 				)
 				send(response, 200, "Thanks ! Enjoy your cookie")
 			} else {
