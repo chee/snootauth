@@ -3,10 +3,15 @@ let execa = require("execa")
 let net = require("net")
 let fs = require("fs").promises
 let crypto = require("crypto")
+let path = require("path")
 
 async function getSnoot(name) {
 	let {stdout: snootid} = await execa("id", ["-u", name]).catch(() => ({}))
 	return snootid
+}
+
+async function own(name, scope) {
+	return execa(path.join(__dirname, "bin", "own"), [name, scope])
 }
 
 async function authenticate(request, response, name, scope) {
@@ -46,7 +51,7 @@ async function listen(request, response, name, scope) {
 
 	fs.unlink(sockPath).catch(() => ({}))
 	let timeout
-	let server = net.createServer(function(client) {
+	let server = net.createServer(function (client) {
 		let data = ""
 		client.on("data", d => {
 			data += d.toString()
@@ -56,9 +61,10 @@ async function listen(request, response, name, scope) {
 				clearTimeout(timeout)
 				let token = `${name}.${crypto.randomBytes(22).toString("base64")}`
 				await fs.writeFile(`/snoots/auth/sessions/${name}.${scope}`, token)
+				await own(name, scope)
 				response.setHeader(
 					"Set-Cookie",
-					`session=${token}; Domain=${scope}.snoot.club; Secure; Path=/`
+					`session=${token}; Domain=snoot.club; Secure; Path=/`
 				)
 				send(response, 200, "Thanks ! Enjoy your cookie")
 			} else {
@@ -72,7 +78,7 @@ async function listen(request, response, name, scope) {
 		})
 	})
 	timeout = setTimeout(() => {
-		server.close(function() {
+		server.close(function () {
 			send(response, 408, "That took too long! please try again")
 		})
 	}, 60000)
@@ -80,11 +86,7 @@ async function listen(request, response, name, scope) {
 }
 
 async function notfound(request, response) {
-	return send(
-		response,
-		404,
-		"go to https://auth.snoot.club/your_snoot_name"
-	)
+	return send(response, 404, "go to https://auth.snoot.club/your_snoot_name")
 }
 
 module.exports = (request, response) => {

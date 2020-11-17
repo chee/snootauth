@@ -1,2 +1,5 @@
 node_modules/
 succeed/target/
+own/target/
+bin/succeed
+bin/own
