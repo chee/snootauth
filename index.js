@@ -64,7 +64,7 @@ async function listen(request, response, name, scope) {
 				await own(name, scope)
 				response.setHeader(
 					"Set-Cookie",
-					`session=${token}; Domain=snoot.club; Secure; Path=/`
+					`${scope}=${token}; Domain=snoot.club; Secure; Path=/`
 				)
 				send(response, 200, "Thanks ! Enjoy your cookie")
 			} else {
