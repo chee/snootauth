@@ -9,7 +9,7 @@ async function getSnoot(name) {
 	return snootid
 }
 
-async function authenticate(request, response, name) {
+async function authenticate(request, response, name, scope) {
 	let snootid = await getSnoot(name)
 
 	if (!snootid) {
@@ -25,7 +25,7 @@ async function authenticate(request, response, name) {
 
 <p>click this:</p>
 
-<p><a href="/listen/${name}">listen</a></p>
+<p><a href="/listen/${name}/${scope}">listen</a></p>
 
 <p>then run this in your terminal!</p>
 
@@ -35,7 +35,7 @@ ssh ${name}@auth.snoot.club -p 2424
 `
 }
 
-async function listen(request, response, name) {
+async function listen(request, response, name, scope) {
 	let snootid = await getSnoot(name)
 
 	if (!snootid) {
@@ -55,10 +55,10 @@ async function listen(request, response, name) {
 			if (data == "success") {
 				clearTimeout(timeout)
 				let token = `${name}.${crypto.randomBytes(22).toString("base64")}`
-				await fs.writeFile(`/snoots/auth/sessions/${name}`, token)
+				await fs.writeFile(`/snoots/auth/sessions/${name}.${scope}`, token)
 				response.setHeader(
 					"Set-Cookie",
-					`session=${token}; Domain=snoot.club; Secure; Path=/`
+					`session=${token}; Domain=${scope}.snoot.club; Secure; Path=/`
 				)
 				send(response, 200, "Thanks ! Enjoy your cookie")
 			} else {
@@ -92,12 +92,17 @@ module.exports = (request, response) => {
 
 	if (parts.length == 1) {
 		let [name] = parts
-		return authenticate(request, response, name)
+		return authenticate(request, response, name, ".")
 	}
 
-	if (parts.length == 2 && parts[0] == "listen") {
-		let [, name] = parts
-		return listen(request, response, name)
+	if (parts.length == 2) {
+		let [name, scope] = parts
+		return authenticate(request, response, name, scope)
+	}
+
+	if (parts.length == 3 && parts[0] == "listen") {
+		let [, name, scope] = parts
+		return listen(request, response, name, scope)
 	}
 
 	return notfound(request, response)
