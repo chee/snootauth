@@ -14,7 +14,7 @@ async function own(name, scope) {
 	return execa(path.join(__dirname, "bin", "own"), [name, scope])
 }
 
-async function authenticate(request, response, name, scope) {
+async function authenticate(request, response, name) {
 	let snootid = await getSnoot(name)
 
 	if (!snootid) {
@@ -30,7 +30,7 @@ async function authenticate(request, response, name, scope) {
 
 <p>click this:</p>
 
-<p><a href="/auth/listen/${name}/${scope}">listen</a></p>
+<p><a href="/auth/listen/${name}">listen</a></p>
 
 <p>then run this in your terminal!</p>
 
@@ -91,18 +91,14 @@ async function notfound(request, response) {
 
 module.exports = (request, response) => {
 	let parts = request.url.split("/").filter(Boolean)
+	let [, scope] = request.headers.host.match(/^(.+)\.snoot\.club$/)
 
 	if (parts.length == 1) {
 		let [name] = parts
-		return authenticate(request, response, name, ".")
-	}
-
-	if (parts.length == 2) {
-		let [name, scope] = parts
 		return authenticate(request, response, name, scope)
 	}
 
-	if (parts.length == 3 && parts[0] == "listen") {
+	if (parts.length == 2 && parts[0] == "listen") {
 		let [, name, scope] = parts
 		return listen(request, response, name, scope)
 	}
