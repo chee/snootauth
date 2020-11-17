@@ -30,7 +30,7 @@ async function authenticate(request, response, name, scope) {
 
 <p>click this:</p>
 
-<p><a href="/listen/${name}/${scope}">listen</a></p>
+<p><a href="/auth/listen/${name}/${scope}">listen</a></p>
 
 <p>then run this in your terminal!</p>
 
