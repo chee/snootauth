@@ -14,7 +14,7 @@ async function own(name, scope) {
 	return execa(path.join(__dirname, "bin", "own"), [name, scope])
 }
 
-async function authenticate(request, response, name) {
+async function authenticate(request, response, name, scope) {
 	let snootid = await getSnoot(name)
 
 	if (!snootid) {
@@ -35,7 +35,7 @@ async function authenticate(request, response, name) {
 <p>then run this in your terminal!</p>
 
 <pre><code>
-ssh ${name}@auth.snoot.club -p 2424
+ssh ${name}@${scope}.snoot.club -p 2424
 </code></pre>
 `
 }
@@ -86,7 +86,7 @@ async function listen(request, response, name, scope) {
 }
 
 async function notfound(request, response) {
-	return send(response, 404, "go to https://auth.snoot.club/your_snoot_name")
+	return send(response, 404, "sorry")
 }
 
 module.exports = (request, response) => {
@@ -99,7 +99,7 @@ module.exports = (request, response) => {
 	}
 
 	if (parts.length == 2 && parts[0] == "listen") {
-		let [, name, scope] = parts
+		let [, name] = parts
 		return listen(request, response, name, scope)
 	}
 
