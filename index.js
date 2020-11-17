@@ -82,7 +82,15 @@ async function listen(request, response, name, scope) {
 			send(response, 408, "That took too long! please try again")
 		})
 	}, 60000)
-	server.listen(sockPath)
+	try {
+		server.listen(sockPath)
+	} catch (error) {
+		send(
+			response,
+			500,
+			"something went wrong trying to listen ,perhaps you are listening on another tab or are the victim of a DoS attack?"
+		)
+	}
 }
 
 async function notfound(request, response) {
